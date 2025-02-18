@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import Header from "./Header";
+import ProductList from "./productList";
 
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <React.Fragment>
+      <Header />
+      <ProductList />
+    </React.Fragment>
+  );
+};
 
-export default App
+export default App;

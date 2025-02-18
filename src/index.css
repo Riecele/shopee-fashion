@@ -1,35 +1,34 @@
 
 :root {
-    --bg-color: #ffffff;
-    --text-color: #5e5858;
-  }
-  
-  .dark-theme {
-    --bg-color: #222222;
-    --text-color: #ebe5e5;
-  }
-  
-  
-  body {
-    margin: 0 10px;
-  
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-      'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -ms-overflow-style: none;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  /* Hide scrollbar */
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  
-  html {
-    scrollbar-width: none;
-  }
-  
-  
+  --bg-color: #ffffff;
+  --text-color: #5e5858;
+}
+
+.dark-theme {
+  --bg-color: #222222;
+  --text-color: #ebe5e5;
+}
+
+
+body {
+  margin: 0 10px;
+
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -ms-overflow-style: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none;
+}
+
