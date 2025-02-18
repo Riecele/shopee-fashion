@@ -45,7 +45,8 @@ class StoreProvider extends Component {
             "https://images.unsplash.com/photo-1590564310418-66304f55a2c2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHN1bmdsYXNzZXN8ZW58MHx8MHx8fDA%3D"
         }
       ],
-      cart: []
+      cart: [],
+      orders: []
     };
   }
   addToCart = (product) => {
@@ -80,18 +81,19 @@ class StoreProvider extends Component {
       const cartItem = prevState.cart.find((item) => item.id === productId);
 
       if (product && product.quantity > 0) {
-        return {
-          products: prevState.products.map((p) =>
-            p.id === productId ? { ...p, quantity: p.quantity - 1 } : p
-          ),
-          cart: cartItem
-            ? prevState.cart.map((item) =>
-                item.id === productId
-                  ? { ...item, quantity: item.quantity + 1 }
-                  : item
-              )
-            : [...prevState.cart, { ...product, quantity: 1 }]
-        };
+        if (cartItem && cartItem.quantity < product.quantity) {
+          return {
+            cart: prevState.cart.map((item) =>
+              item.id === productId
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            )
+          };
+        } else if (!cartItem) {
+          return {
+            cart: [...prevState.cart, { ...product, quantity: 1 }]
+          };
+        }
       }
       return null;
     });
@@ -103,9 +105,6 @@ class StoreProvider extends Component {
 
       if (cartItem && cartItem.quantity > 0) {
         return {
-          products: prevState.products.map((p) =>
-            p.id === productId ? { ...p, quantity: p.quantity + 1 } : p
-          ),
           cart:
             cartItem.quantity > 1
               ? prevState.cart.map((item) =>
@@ -134,11 +133,17 @@ class StoreProvider extends Component {
     }));
   };
 
-  updateProduct = (productId, name, description, quantity) => {
+  updateProduct = (productId, name, description, quantity, price) => {
     this.setState((prevState) => ({
       products: prevState.products.map((p) =>
-        p.id === productId ? { ...p, name, description, quantity } : p
+        p.id === productId ? { ...p, name, description, quantity, price } : p
       )
+    }));
+  };
+
+  removeProduct = (productId) => {
+    this.setState((prevState) => ({
+      products: prevState.products.filter((product) => product.id !== productId)
     }));
   };
 
@@ -146,23 +151,46 @@ class StoreProvider extends Component {
     return this.state.cart.reduce((total, item) => total + item.quantity, 0);
   };
 
+  createOrder = (cart) => {
+    const newOrder = {
+      id: uuidv4(),
+      items: cart,
+      date: new Date().toISOString()
+    };
+
+    this.setState((prevState) => ({
+      orders: [...prevState.orders, newOrder],
+      cart: [],
+      products: prevState.products.map((product) => {
+        const cartItem = cart.find((item) => item.id === product.id);
+        return cartItem
+          ? { ...product, quantity: product.quantity - cartItem.quantity }
+          : product;
+      })
+    }));
+  };
+
   render() {
     return (
-      <StoreContext.Provider
-        value={{
-          products: this.state.products,
-          cart: this.state.cart,
-          addToCart: this.addToCart,
-          removeFromCart: this.removeFromCart,
-          increaseCartQuantity: this.increaseCartQuantity,
-          decreaseCartQuantity: this.decreaseCartQuantity,
-          addProduct: this.addProduct,
-          updateProduct: this.updateProduct,
-          getTotalCartQuantity: this.getTotalCartQuantity
-        }}
-      >
-        {this.props.children}
-      </StoreContext.Provider>
+      <React.Fragment>
+        <StoreContext.Provider
+          value={{
+            products: this.state.products,
+            cart: this.state.cart,
+            addToCart: this.addToCart,
+            removeFromCart: this.removeFromCart,
+            increaseCartQuantity: this.increaseCartQuantity,
+            decreaseCartQuantity: this.decreaseCartQuantity,
+            addProduct: this.addProduct,
+            updateProduct: this.updateProduct,
+            removeProduct: this.removeProduct,
+            getTotalCartQuantity: this.getTotalCartQuantity,
+            createOrder: this.createOrder
+          }}
+        >
+          {this.props.children}
+        </StoreContext.Provider>
+      </React.Fragment>
     );
   }
 }

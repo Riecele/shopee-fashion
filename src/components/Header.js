@@ -1,128 +1,94 @@
-import React, { useState, useContext } from "react";
+import React, { Component } from "react";
+import { FaUser, FaBars } from "react-icons/fa";
+import Cart from "./Cart";
+import Admin from "./Admin";
+import CartIcon from "./CartIcon";
 
-import {  FaUser, FaSun, FaMoon, FaBars, FaShoppingCart } from "react-icons/fa";
-import { StoreContext } from "./storeManager";
+class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      menuOpen: false,
+      isCartOpen: false,
+      isAdminOpen: false,
+    };
+  }
 
-function Header({ onToggleTheme, darkTheme }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const { getTotalCartQuantity } = useContext(StoreContext);
-  const totalQuantity = getTotalCartQuantity();
+  render() {
+    const { menuOpen, isCartOpen, isAdminOpen } = this.state;
 
-  const headerStyles = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "1rem",
-    backgroundColor: darkTheme ? "#333" : "#fff",
-    color: darkTheme ? "#fff" : "#333",
-    position: "sticky",
-    top: 0,
-    zIndex: 1000,
-    flexWrap: "wrap",
-  };
+    const styles = {
+      header: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "1rem",
+        backgroundColor: "#fff",
+        color: "#333",
+        position: "sticky",
+        top: 0,
+        zIndex: 1000,
+        flexWrap: "wrap",
+      },
+      headerBrand: {
+        display: "flex",
+        alignItems: "center",
+      },
+      menuIcon: {
+        display: "none",
+        marginLeft: "1rem",
+        cursor: "pointer",
+      },
+      headerNav: {
+        display: "flex",
+        flexWrap: "wrap",
+      },
+      headerNavLink: {
+        margin: "0 1rem",
+        textDecoration: "none",
+        color: "#333",
+        transition: "color 0.3s",
+      },
+      headerActions: {
+        display: "flex",
+        alignItems: "center",
+      },
+      icon: {
+        marginLeft: "1rem",
+        fontSize: "1.25rem",
+        cursor: "pointer",
+      },
+      menuOpen: menuOpen ? { display: "flex" } : { display: "none" },
+    };
 
-  const headerBrandStyles = {
-    display: "flex",
-    alignItems: "center",
-  };
-
-  const menuIconStyles = {
-    display: "none",
-    marginLeft: "1rem",
-    cursor: "pointer",
-  };
-
-  const headerNavStyles = {
-    display: "flex",
-    flexWrap: "wrap",
-  };
-
-  const headerNavLinkStyles = {
-    margin: "0 1rem",
-    textDecoration: "none",
-    color: darkTheme ? "#fff" : "#333",
-    transition: "color 0.3s",
-  };
-
-  
-
-  const headerActionsStyles = {
-    display: "flex",
-    alignItems: "center",
-  };
-
-  const themeToggleStyles = {
-    marginRight: "1rem",
-    padding: "0.5rem 1rem",
-    background: "transparent",
-    border: "none",
-    color: darkTheme ? "#fff" : "#333",
-    cursor: "pointer",
-    fontSize: "1.25rem",
-    transition: "transform 0.3s",
-  };
-
-  const themeToggleHoverStyles = {
-    transform: "rotate(20deg)",
-  };
-
-  const iconStyles = {
-    marginLeft: "1rem",
-    fontSize: "1.25rem",
-    cursor: "pointer",
-  };
-
-  const cartIconStyles = {
-    position: "relative",
-    display: "inline-block",
-  };
-
-  const cartCountStyles = {
-    position: "absolute",
-    top: "-5px",
-    right: "-10px",
-    backgroundColor: "red",
-    color: "white",
-    fontSize: "12px",
-    fontWeight: "bold",
-    padding: "3px 6px",
-    borderRadius: "50%",
-  };
-
-  const menuOpenStyles = menuOpen ? { display: "flex" } : { display: "none" };
-
-  return (
-    <header style={headerStyles}>
-      <div style={headerBrandStyles}>
-        <h1>My E-Commerce</h1>
-        <FaBars
-          style={menuIconStyles}
-          onClick={() => setMenuOpen(!menuOpen)}
-        />
-      </div>
-      <nav style={{ ...headerNavStyles, ...menuOpenStyles }}>
-        <a href="/about" style={headerNavLinkStyles}>
-          About
-        </a>
-        <a href="/contact" style={headerNavLinkStyles}>
-          Contact Us
-        </a>
-      </nav>
-      <div style={headerActionsStyles}>
-        <button
-          onClick={onToggleTheme}
-          style={{ ...themeToggleStyles, ...(darkTheme ? themeToggleHoverStyles : {}) }}
-        >
-          {darkTheme ? <FaSun /> : <FaMoon />}
-        </button>
-        <div style={cartIconStyles}>
-          <FaShoppingCart style={iconStyles} />
-          <span style={cartCountStyles}>{totalQuantity}</span>
-        </div>
-        <FaUser style={iconStyles} />
-      </div>
-    </header>
-  );
+    return (
+      <React.Fragment>
+        <header style={styles.header}>
+          <div style={styles.headerBrand}>
+            <h1>My E-Commerce</h1>
+            <FaBars
+              style={styles.menuIcon}
+              onClick={() => this.setState({ menuOpen: !menuOpen })}
+            />
+          </div>
+          <nav style={{ ...styles.headerNav, ...styles.menuOpen }}>
+            <a href="/about" style={styles.headerNavLink}>
+              About
+            </a>
+            <a href="/contact" style={styles.headerNavLink}>
+              Contact Us
+            </a>
+          </nav>
+          <div style={styles.headerActions}>
+            <CartIcon onClick={() => this.setState({ isCartOpen: true })} />
+            <FaUser style={styles.icon} onClick={() => this.setState({ isAdminOpen: true })} />
+          </div>
+          {isCartOpen && <Cart onClose={() => this.setState({ isCartOpen: false })} />}
+          {isAdminOpen && <Admin onClose={() => this.setState({ isAdminOpen: false })} />}
+        </header>
+      </React.Fragment>
+    );
+  }
 }
 
 export default Header;
