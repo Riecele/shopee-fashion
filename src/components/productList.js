@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import ProductCard from "./productCard";
-import { StoreContext } from "./storeManager";
 
 function ProductList() {
-  const { products } = useContext(StoreContext);
-
+  const {productItems} = useSelector((state) => state.products);
+  console.log("productItems", productItems);
   const styles = {
     productList: {
       display: "grid",
@@ -18,9 +18,13 @@ function ProductList() {
   return (
     <React.Fragment>
       <div style={styles.productList}>
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {productItems && productItems.length > 0 ? (
+          productItems.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
+        ) : (
+          <p>No products available</p>
+        )}
       </div>
     </React.Fragment>
   );
