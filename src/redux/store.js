@@ -1,65 +1,54 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 import productsReducer from "./slices/productsSlice";
 import cartReducer from "./slices/cartSlice";
 import ordersReducer from "./slices/ordersSlice";
 
+// Combine all slices
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
   orders: ordersReducer,
 });
 
-const persistConfig = {
-  key: "root",
-  storage,
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
+// Create store without persistence
 const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false,
+  }),
 });
 
+// Hot module replacement code
 if (module.hot) {
   module.hot.accept('./slices/productsSlice', () => {
     const newProductsReducer = require('./slices/productsSlice').default;
-    store.replaceReducer(
-      persistReducer(persistConfig, combineReducers({
-        products: newProductsReducer,
-        cart: cartReducer,
-        orders: ordersReducer,
-      }))
-    );
+    const nextRootReducer = combineReducers({
+      products: newProductsReducer,
+      cart: cartReducer,
+      orders: ordersReducer,
+    });
+    store.replaceReducer(nextRootReducer);
   });
 
   module.hot.accept('./slices/cartSlice', () => {
     const newCartReducer = require('./slices/cartSlice').default;
-    store.replaceReducer(
-      persistReducer(persistConfig, combineReducers({
-        products: productsReducer,
-        cart: newCartReducer,
-        orders: ordersReducer,
-      }))
-    );
+    const nextRootReducer = combineReducers({
+      products: productsReducer,
+      cart: newCartReducer,
+      orders: ordersReducer,
+    });
+    store.replaceReducer(nextRootReducer);
   });
 
   module.hot.accept('./slices/ordersSlice', () => {
     const newOrdersReducer = require('./slices/ordersSlice').default;
-    store.replaceReducer(
-      persistReducer(persistConfig, combineReducers({
-        products: productsReducer,
-        cart: cartReducer,
-        orders: newOrdersReducer,
-      }))
-    );
+    const nextRootReducer = combineReducers({
+      products: productsReducer,
+      cart: cartReducer,
+      orders: newOrdersReducer,
+    });
+    store.replaceReducer(nextRootReducer);
   });
 }
 
-export const persistor = persistStore(store);
 export default store;

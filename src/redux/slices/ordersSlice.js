@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { updateProductQuantity } from "./productsSlice";
+import { clearCart } from "./cartSlice";  // Import the clearCart action
 
 const initialState = [];
 
@@ -15,10 +16,14 @@ const ordersSlice = createSlice({
         date: new Date().toISOString(),
       };
       state.push(newOrder);
+
+    
       action.payload.forEach((item) => {
-        updateProductQuantity(state, { payload: { id: item.id, quantity: item.quantity } });
-      }
-      );
+        updateProductQuantity({ id: item.id, quantity: item.quantity });
+      });
+
+   
+      clearCart(); 
     },
   },
 });

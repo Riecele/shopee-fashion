@@ -5,53 +5,36 @@ const initialState = {
   productItems: [
     {
       id: uuidv4(),
-      name: "T-Shirt",
-      description: "Comfortable cotton t-shirt",
-      quantity: 5,
-      price: 20,
-      image: "https://res.cloudinary.com/dcdivbkwd/image/upload/v1676012835/cld-sample-4.jpg", 
-    },
-    {
-      id: uuidv4(),
-      name: "Jeans",
-      description: "Stylish denim jeans",
-      quantity: 3,
-      price: 40,
-      image: "https://res.cloudinary.com/dcdivbkwd/image/upload/v1676012835/cld-sample-5.jpg",
-    },
-    {
-      id: uuidv4(),
-      name: "Sneakers",
-      description: "Comfortable running sneakers",
+      name: "Dress",
+      description: "Elegant evening dress",
       quantity: 2,
+      price: 50,
+      image: "/images/dress.jpg",
+    },
+    {
+      id: uuidv4(),
+      name: "Shoes",
+      description: "Comfortable shoes",
+      quantity: 4,
       price: 60,
-      image: "https://res.cloudinary.com/dcdivbkwd/image/upload/v1676012835/cld-sample-4.jpg",
+      image: "/images/shoes.jpg",
     },
     {
       id: uuidv4(),
-      name: "T-Shirt",
-      description: "Comfortable cotton t-shirt",
-      quantity: 5,
-      price: 20,
-      image: "https://res.cloudinary.com/dcdivbkwd/image/upload/v1676012835/cld-sample-4.jpg", 
+      name: "Sunglasses",
+      description: "Stylish sunglasses",
+      quantity: 6,
+      price: 25,
+      image: "/images/sunglasses.jpg",
     },
     {
       id: uuidv4(),
-      name: "Jeans",
-      description: "Stylish denim jeans",
+      name: "Watch",
+      description: "Fashionable wristwatch",
       quantity: 3,
-      price: 40,
-      image: "https://res.cloudinary.com/dcdivbkwd/image/upload/v1676012835/cld-sample-5.jpg",
+      price: 80,
+      image: "/images/watch.jpg",
     },
-    {
-      id: uuidv4(),
-      name: "Sneakers",
-      description: "Comfortable running sneakers",
-      quantity: 2,
-      price: 60,
-      image: "https://res.cloudinary.com/dcdivbkwd/image/upload/v1676012835/cld-sample-4.jpg",
-    },
-
   ],
 };
 
@@ -60,14 +43,14 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     addProduct: (state, action) => {
-      const { name, description, quantity, price, image } = action.payload;
+      const { name, description, quantity, price} = action.payload;
       state.productItems.push({
         id: uuidv4(),
         name,
         description,
         quantity,
         price,
-        image,
+        image: "/images/watch.jpg",
       });
     },
     updateProduct: (state, action) => {
@@ -81,7 +64,6 @@ const productsSlice = createSlice({
       }
     },
     updateProductQuantity: (state, action) => {
-     console.log("action", action);
       const { id, quantity } = action.payload;
       const product = state.productItems.find((p) => p.id === id);
       if (product) {
@@ -89,10 +71,17 @@ const productsSlice = createSlice({
       }
     },
     removeProduct: (state, action) => {
-      state.productItems = state.productItems.filter((product) => product.id !== action.payload);
+      state.productItems = state.productItems.filter(
+        (product) => product.id !== action.payload
+      );
     },
   },
 });
 
-export const { addProduct, updateProduct, removeProduct, updateProductQuantity } = productsSlice.actions;
+export const {
+  addProduct,
+  updateProduct,
+  removeProduct,
+  updateProductQuantity,
+} = productsSlice.actions;
 export default productsSlice.reducer;
