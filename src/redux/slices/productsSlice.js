@@ -27,6 +27,31 @@ const initialState = {
       price: 60,
       image: "https://res.cloudinary.com/dcdivbkwd/image/upload/v1676012835/cld-sample-4.jpg",
     },
+    {
+      id: uuidv4(),
+      name: "T-Shirt",
+      description: "Comfortable cotton t-shirt",
+      quantity: 5,
+      price: 20,
+      image: "https://res.cloudinary.com/dcdivbkwd/image/upload/v1676012835/cld-sample-4.jpg", 
+    },
+    {
+      id: uuidv4(),
+      name: "Jeans",
+      description: "Stylish denim jeans",
+      quantity: 3,
+      price: 40,
+      image: "https://res.cloudinary.com/dcdivbkwd/image/upload/v1676012835/cld-sample-5.jpg",
+    },
+    {
+      id: uuidv4(),
+      name: "Sneakers",
+      description: "Comfortable running sneakers",
+      quantity: 2,
+      price: 60,
+      image: "https://res.cloudinary.com/dcdivbkwd/image/upload/v1676012835/cld-sample-4.jpg",
+    },
+
   ],
 };
 

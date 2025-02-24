@@ -9,14 +9,21 @@ function ProductList() {
     productList: {
       display: "grid",
       gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-      gap: "20px",
+      gap: "10px",
       padding: "40px 20px",
       justifyItems: "center",
-    }
+    },
+    title: {
+      fontSize: "1.5rem",
+      fontWeight: "bold",
+      textAlign: "center",
+      margin: "1rem 0",
+    },
   };
 
   return (
     <React.Fragment>
+      <h2 style={styles.title}>Products</h2>
       <div style={styles.productList}>
         {productItems && productItems.length > 0 ? (
           productItems.map((product) => (

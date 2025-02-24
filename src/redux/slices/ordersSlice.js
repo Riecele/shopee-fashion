@@ -14,11 +14,11 @@ const ordersSlice = createSlice({
         items: action.payload,
         date: new Date().toISOString(),
       };
-      console.log("New order", newOrder);
       state.push(newOrder);
-      action.payload.forEach(item => {
+      action.payload.forEach((item) => {
         updateProductQuantity(state, { payload: { id: item.id, quantity: item.quantity } });
-      });
+      }
+      );
     },
   },
 });
